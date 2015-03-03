@@ -36,6 +36,7 @@ dependencies {
 bintray {
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
+    def gpgPhrase = properties.getProperty("bintray.gpg.passphrase")
 
     configurations = ['archives']
     pkg {
@@ -45,6 +46,14 @@ bintray {
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
         publish = true
+
+        version {
+            vcsTag = version
+            gpg {
+                sign = true
+                passphrase = gpgPhrase
+            }
+        }
     }
 }
 
