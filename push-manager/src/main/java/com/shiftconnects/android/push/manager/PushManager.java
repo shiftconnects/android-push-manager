@@ -26,7 +26,7 @@ import com.shiftconnects.android.push.util.GcmRegistrationAsyncTask;
 import com.shiftconnects.android.push.util.GcmSharedPreferenceConstants;
 
 /**
- * Handles registering the device with {@link com.google.android.gms.gcm.GoogleCloudMessaging}
+ * Handles registering the device with Google Cloud Messaging
  * and saving off the registration id. Subclasses need to implement {@link #onGcmRegistrationIdAvailable(String)}
  * to then check to see if the registration id has been registered with a push server. In order to begin
  * the registration process, {@link #registerWithGCM()} must be called and should be called every time
@@ -45,7 +45,7 @@ public abstract class PushManager implements GcmRegistrationAsyncTask.GcmRegistr
 
     /**
      * Default constructor
-     * @param googleCloudMessaging - the instance of {@link com.google.android.gms.gcm.GoogleCloudMessaging} to use
+     * @param googleCloudMessaging - the instance of Google Cloud Messaging to use
      * @param gcmSenderId - the GCM sender id to be used to retrieve registration ids
      * @param sharedPrefs - a {@link android.content.SharedPreferences} implementation to store the registration id in
      */

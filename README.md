@@ -5,8 +5,17 @@ them to your backend, and also covers all of the gotchas found in [this technica
 by PushBullet to keep it working reliably, including exponential retry when retrieving a GCM registration id has failed.
 
 ## Setup
+* Add the following to your ```build.gradle``` file:
+```gradle
+compile('com.shiftconnects.android.location:location-service:1.0.0'){transitive=true}
+```
+If you do not wish to pull in our version of the Play Services, feel free to ignore the transitive=true flag. If you do this, you will need to provide your own versions of the play services dependencies...
+```gradle
+compile 'com.google.android.gms:play-services-location:6.5.87'
+compile 'com.google.android.gms:play-services-base:6.5.87'
+```
 
-* First you will need to follow the steps listed [here](http://developer.android.com/google/gcm/gs.html) to get your GCM sender ID and api key.
+* Next you will need to follow the steps listed [here](http://developer.android.com/google/gcm/gs.html) to get your GCM sender ID and api key.
 * Add the following permissions to your AndroidManifest.xml file: 
 ```xml
 <permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
