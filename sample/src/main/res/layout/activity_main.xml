@@ -1,0 +1,73 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true"
+                tools:context=".MainActivity">
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/unregistered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:textColor="#ffff0000"
+        android:text="@string/unregistered"
+        android:visibility="gone"/>
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/registered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:textColor="#ff00ff00"
+        android:text="@string/registered"
+        android:visibility="visible"/>
+
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/register_button_text"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/unregister_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/unregister_button_text"
+        android:visibility="gone"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/message_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/message_header"
+        android:visibility="gone"/>
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ff0000ff"
+        tools:text="Message"/>
+
+</LinearLayout>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">android-push-manager</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="registered">This device IS registered with the push server.</string>
+    <string name="unregistered">This device IS NOT registered with the push server.</string>
+
+    <string name="register_button_text">Register with Server</string>
+    <string name="unregister_button_text">Unregister with Server</string>
+
+    <string name="message_header">Received Message:</string>
+</resources>

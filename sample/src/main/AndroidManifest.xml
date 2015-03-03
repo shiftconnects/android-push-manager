@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.shiftconnects.android.push.sample" >
+
+    <!-- Needed for GCM -->
+    <permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+
+    <!--
+    GCM registration ids can change from device boot to device boot or when the Android version
+    has been updated. It is recommended to add this boot receiver so that the app gets notified
+    when a device boot has completed, then upon boot a call to the PushManager.registerWithGCM() should happen
+    in order to get a new GCM registration id
+    -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <application
+        android:name=".ExampleApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".service.ExampleGcmIntentService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.shiftconnects.android.push.action.MESSAGE" />
+                <action android:name="com.shiftconnects.android.push.action.SEND_ERROR" />
+                <action android:name="com.shiftconnects.android.push.action.DELETED" />
+            </intent-filter>
+        </service>
+
+        <!--
+        GCM registration ids can change from device boot to device boot or when the Android version
+        has been updated. It is recommended to add this boot receiver so that the app gets notified
+        when a device boot has completed, then upon boot a call to the PushManager.registerWithGCM() should happen
+        in order to get a new GCM registration id
+        -->
+        <receiver android:name="com.shiftconnects.android.push.receiver.OnBootCompletedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <!--
+        GCM registration ids can change after an app version upgrade. It is recommended to add this app upgrade receiver
+        so that the app gets notified when a the app has been upgraded and a call to PushManager.registerWithGCM() should happen
+        in order to get a new GCM registration id
+        -->
+        <receiver
+            android:name="com.shiftconnects.android.push.receiver.AppUpgradeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
