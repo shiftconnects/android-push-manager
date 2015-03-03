@@ -9,8 +9,8 @@ by PushBullet to keep it working reliably, including exponential retry when retr
 * First you will need to follow the steps listed [here](http://developer.android.com/google/gcm/gs.html) to get your GCM sender ID and api key.
 * Add the following permissions to your AndroidManifest.xml file: 
 ```xml
-	<permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
+<permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+<uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
 ```
 You can replace ```${applicationId}``` with your application's package or leave as is and it will get replaced with the proper
 package name for your build type during the gradle build. These permissions are necessary in order to receive GCM messages.
