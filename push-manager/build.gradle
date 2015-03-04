@@ -2,9 +2,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-version = "1.0.0"
+version = "1.0.1"
 def siteUrl = 'https://github.com/shiftconnects/android-push-manager'      // Homepage URL of the library
 def gitUrl = 'https://github.com/shiftconnects/android-push-manager.git'   // Git repository URL
+def projectDesc = 'Provides a mechanism for quickly getting Google Cloud Messaging running within an Android app.'
 group = "com.shiftconnects.android.push"
 
 Properties properties = new Properties()
@@ -42,6 +43,7 @@ bintray {
     pkg {
         repo = "maven"
         name = group
+        desc = projectDesc
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
@@ -52,6 +54,12 @@ bintray {
             gpg {
                 sign = true
                 passphrase = gpgPhrase
+            }
+            mavenCentralSync {
+                sync = true
+                user = properties.getProperty("oss.userToken")
+                password = properties.getProperty("oss.userTokenValue")
+                close = '1'
             }
         }
     }
@@ -65,7 +73,8 @@ install {
                 packaging 'aar'
 
                 // Add your description here
-                name 'Provides a mechanism for quickly getting Google Cloud Messaging running within an Android app.'
+                name 'Android Push Manager'
+                description projectDesc
                 url siteUrl
 
                 // Set your license
