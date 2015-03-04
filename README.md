@@ -7,7 +7,7 @@ by PushBullet to keep it working reliably, including exponential retry when retr
 ## Setup
 * Add the following to your ```build.gradle``` file:
 ```gradle
-compile('com.shiftconnects.android.push:android-push-manager:1.0.0'){transitive=true}
+compile('com.shiftconnects.android.push:android-push-manager:1.0.1'){transitive=true}
 ```
 If you do not wish to pull in our version of the Play Services, feel free to ignore the transitive=true flag. If you do this, you will need to provide your own versions of the play services dependencies...
 ```gradle
