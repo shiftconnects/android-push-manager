@@ -21,7 +21,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.shiftconnects.android.push.receiver.GcmBroadcastReceiver;
+import com.google.android.gms.iid.InstanceID;
 
 import java.util.Random;
 
@@ -29,7 +29,7 @@ import java.util.Random;
 * AsyncTask which handles retrieving a GCM registration id with Google Cloud Messaging using exponential
 * back-off
 */
-public class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> implements GcmBroadcastReceiver.Callbacks {
+public class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> {
 
     public interface GcmRegistrationCallbacks {
 
@@ -52,19 +52,15 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> impl
     private static final int BACK_OFF_MILLI_SECONDS = 2000;
     private static final Random random = new Random();
 
-    private GoogleCloudMessaging googleCloudMessaging;
+    private InstanceID instanceID;
     private String gcmSenderId;
     private GcmRegistrationCallbacks callbacks;
     private boolean notifiedCallbacks;
 
-    public GcmRegistrationAsyncTask(GcmRegistrationCallbacks callbacks, GoogleCloudMessaging googleCloudMessaging, String gcmSenderId) {
+    public GcmRegistrationAsyncTask(GcmRegistrationCallbacks callbacks, InstanceID instanceID, String gcmSenderId) {
         this.callbacks = callbacks;
-        this.googleCloudMessaging = googleCloudMessaging;
+        this.instanceID = instanceID;
         this.gcmSenderId = gcmSenderId;
-    }
-
-    @Override protected void onPreExecute() {
-        GcmBroadcastReceiver.registerCallbacks(this);
     }
 
     @Override protected String doInBackground(Void... params) {
@@ -75,7 +71,7 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> impl
                 Log.d(TAG, "Attempt #" + i + " to register for GCM.");
             }
             try {
-                registrationId = googleCloudMessaging.register(gcmSenderId);
+                registrationId = instanceID.getToken(gcmSenderId, GoogleCloudMessaging.INSTANCE_ID_SCOPE);
                 if (DEBUG) {
                     Log.d(TAG, "Received a GCM registration id: " + registrationId);
                 }
@@ -106,11 +102,6 @@ public class GcmRegistrationAsyncTask extends AsyncTask<Void, Void, String> impl
     }
 
     @Override protected void onPostExecute(String gcmRegistrationId) {
-        GcmBroadcastReceiver.unregisterCallbacks();
-        onReceivedRegistrationId(gcmRegistrationId);
-    }
-
-    @Override public void onReceivedRegistrationId(String gcmRegistrationId) {
         if (callbacks != null && !notifiedCallbacks) {
             if (!TextUtils.isEmpty(gcmRegistrationId)) {
                 callbacks.onRegistrationSuccessful(gcmRegistrationId);

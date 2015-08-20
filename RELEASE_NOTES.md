@@ -1,3 +1,10 @@
+v1.1.0
+Updated to 23.0.0 build tools
+Updated to 1.3.0 android gradle plugin
+Updated to 23.0.0 support & app compat
+Updated to 7.8.0 gcm
+Updated code to use new apis in gcm
+
 v1.0.2
 Bumped version to upload to Maven Central.
 
