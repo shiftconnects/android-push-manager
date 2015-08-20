@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.shiftconnects.android.push.sample.manager.ExamplePushManager;
 import com.shiftconnects.android.push.sample.service.ExamplePushRegistrationService;
 import com.squareup.otto.Bus;
@@ -56,7 +57,7 @@ public class ExampleApplication extends Application {
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build()
                 .create(ExamplePushRegistrationService.class);
-        PUSH_MANAGER = new ExamplePushManager(GoogleCloudMessaging.getInstance(this), GCM_SENDER_ID, gcmSharedPrefs, PUSH_REGISTRATION_SERVICE);
+        PUSH_MANAGER = new ExamplePushManager(InstanceID.getInstance(this), GCM_SENDER_ID, gcmSharedPrefs, PUSH_REGISTRATION_SERVICE);
 
         // this will register the device with GCM and retrieve a registration id for this device
         PUSH_MANAGER.registerWithGCM();

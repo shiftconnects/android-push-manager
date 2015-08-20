@@ -19,37 +19,26 @@ package com.shiftconnects.android.push.sample.service;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
+import com.google.android.gms.gcm.GcmListenerService;
 import com.shiftconnects.android.push.sample.ExampleApplication;
 import com.shiftconnects.android.push.sample.event.MessageEvent;
-import com.shiftconnects.android.push.service.GcmIntentService;
 import com.squareup.otto.Produce;
 
 /**
- * Example {@link com.shiftconnects.android.push.service.GcmIntentService} which handles push
+ * Example {@link GcmListenerService} which handles push
  * messages and looks for a message, then posts the message on an Otto {@link com.squareup.otto.Bus}
  * for subscribers
  */
-public class ExampleGcmIntentService extends GcmIntentService {
-
-    private static final String TAG = ExampleGcmIntentService.class.getSimpleName();
+public class ExampleGcmListenerService extends GcmListenerService {
 
     private String lastMessage;
     private final Handler MAIN_THREAD = new Handler(Looper.getMainLooper());
 
-    @Override public void handleSendErrorMessage(Bundle extras) {
-        Log.d(TAG, "handleSendErrorMessage()");
-    }
-
-    @Override public void handleDeletedMessage(Bundle extras) {
-        Log.d(TAG, "handleDeletedMessage()");
-    }
-
-    @Override public void handleMessage(Bundle extras) {
-        Log.d(TAG, "handleMessage()");
-        if (extras.containsKey("message")) {
-            lastMessage = extras.getString("message");
+    @Override
+    public void onMessageReceived(String from, Bundle data) {
+        if (data.containsKey("message")) {
+            lastMessage = data.getString("message");
             MAIN_THREAD.post(new Runnable() {
                 @Override public void run() {
                     ExampleApplication.EVENT_BUS.post(produceMessage());

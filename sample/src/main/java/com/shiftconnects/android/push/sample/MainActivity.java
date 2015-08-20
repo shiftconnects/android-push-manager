@@ -117,6 +117,7 @@ public class MainActivity extends ActionBarActivity implements ExamplePushManage
     }
 
     @Subscribe
+    @SuppressWarnings("unused")
     public void onMessageReceived(MessageEvent event) {
         final String message = event.getMessage();
         if (!TextUtils.isEmpty(message)) {

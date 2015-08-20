@@ -7,12 +7,7 @@ by PushBullet to keep it working reliably, including exponential retry when retr
 ## Setup
 * Add the following to your ```build.gradle``` file:
 ```gradle
-compile('com.shiftconnects.android.push:push-manager:1.0.2'){transitive=true}
-```
-If you do not wish to pull in our version of the Play Services, feel free to ignore the transitive=true flag. If you do this, you will need to provide your own versions of the play services dependencies...
-```gradle
-compile 'com.google.android.gms:play-services-location:6.5.87'
-compile 'com.google.android.gms:play-services-base:6.5.87'
+compile 'com.shiftconnects.android.push:push-manager:1.1.0'
 ```
 
 * Next you will need to follow the steps listed [here](http://developer.android.com/google/gcm/gs.html) to get your GCM sender ID and api key.
@@ -24,15 +19,13 @@ compile 'com.google.android.gms:play-services-base:6.5.87'
 You can replace ```${applicationId}``` with your application's package or leave as is and it will get replaced with the proper
 package name for your build type during the gradle build. These permissions are necessary in order to receive GCM messages.
 
-* Create a class which extends ```GcmIntentService``` and declare it in your AndroidManifest. Make sure to include an intent filter with the listed actions for your service:
+* Create a class which extends ```GcmListenerService``` and declare it in your AndroidManifest. Make sure to include an intent filter with the action for your service:
 ```xml
 <service
     android:name=".service.ExampleGcmIntentService"
     android:exported="false" >
     <intent-filter>
-        <action android:name="com.shiftconnects.android.push.action.MESSAGE" />
-        <action android:name="com.shiftconnects.android.push.action.SEND_ERROR" />
-        <action android:name="com.shiftconnects.android.push.action.DELETED" />
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
     </intent-filter>
 </service>
 ```
@@ -40,22 +33,16 @@ package name for your build type during the gradle build. These permissions are 
 
 
 #### The following steps are *optional* but *highly recommended*:
-* Add the following permission to your AndroidManifest.xml file:
-```xml
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+* Create a class which extends ```InstanceIDListenerService``` and override ```onTokenRefresh()```. This class will be notified when you should refresh your GCM registration id. In your ```onTokenRefresh()``` method you should call your ```PushManager```'s ```registerWithGCM``` method. For more info, see documentation [here](https://developers.google.com/android/reference/com/google/android/gms/iid/InstanceIDListenerService). 
+Add the service to your AndroidManifest.xml, like this:
 ```
-* Add the following ```BroadcastReceiver``` to your AndroidManifest.xml file:
-```xml
-<receiver android:name="com.shiftconnects.android.push.receiver.OnBootCompletedReceiver" >
+<service android:name=".service.ExampleInstanceIdListenerService"
+    android:exported="false">
     <intent-filter>
-        <action android:name="android.intent.action.BOOT_COMPLETED" />
-        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-        <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+        <action android:name="com.google.android.gms.iid.InstanceID"/>
     </intent-filter>
-</receiver>
+</service>
 ```
-
-The purpose of this permission and ```OnBootCompletedReceiver``` are so that your app will be notified when the device has booted, whether it be from just turning the device off then on or more importantly, after a system software update. GCM registration ids can change from device boot to device boot or when the Android version has been updated so it is very important to re-register for a GCM registration id in this case in order to keep push working.
 
 * Add the following ```BroadcastReceiver``` to your AndroidManifest.xml file: 
 ```xml
@@ -71,7 +58,7 @@ The purpose of ```AppUpgradeReceiver``` is so that your app will be notified whe
 
 ## Usage
 
-Create an instance of your ```PushManager```. We recommend creating a single instance of this in your ```Application``` subclass as can be seen in the sample or by  using a dependency injection framework. The class requires an instance of ```GoogleCloudMessaging``` which you can easily get by calling ```GoogleCloudMessaging.getInstance(Context)```, your GCM sender id which can be obtained via the first step in the setup, and an instance of ```SharedPreferences``` which will be used to store the GCM registration id between app launches.
+Create an instance of your ```PushManager```. We recommend creating a single instance of this in your ```Application``` subclass as can be seen in the sample or by  using a dependency injection framework. The class requires an instance of ```InstanceID``` which you can easily get by calling ```InstanceID.getInstance(Context)```, your GCM sender id which can be obtained via the first step in the setup, and an instance of ```SharedPreferences``` which will be used to store the GCM registration id between app launches.
 
 In your ```PushManager``` you will need to override ```onGcmRegistrationIdAvailable(String)``` which will be passed the GCM registration id for your device when one has successfully been obtained. When you receive a registration id from this method it is your job to register it with your backend push server, and also check to make sure it isn't already registered. You will also need to override ```onGcmRegistrationFailed()``` which will be called when registration with GCM has failed after retry.
 
@@ -118,10 +105,4 @@ These permissions must be added to your application's AndroidManifest.xml file:
 ```xml
 <permission android:name="${applicationId}.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE" />
-```
-
-This permission is **optional** but **highly recommended** and if you use the ```OnBootCompletedReceiver``` it is **required**:
-
-```xml
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 ```

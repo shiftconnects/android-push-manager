@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.shiftconnects.android.push.manager.PushManager;
 import com.shiftconnects.android.push.sample.service.ExamplePushRegistrationService;
 
@@ -35,7 +36,7 @@ import retrofit.client.Response;
  */
 public class ExamplePushManager extends PushManager {
 
-    public static interface PushServerCallbacks {
+    public interface PushServerCallbacks {
         void onRegisteredWithPushServer(String registeredId);
         void onUnregisteredWithPushServer(String unregisteredId);
     }
@@ -48,8 +49,8 @@ public class ExamplePushManager extends PushManager {
 
     private PushServerCallbacks mCallbacks;
 
-    public ExamplePushManager(GoogleCloudMessaging googleCloudMessaging, String gcmSenderId, SharedPreferences sharedPrefs, ExamplePushRegistrationService registrationService) {
-        super(googleCloudMessaging, gcmSenderId, sharedPrefs);
+    public ExamplePushManager(InstanceID instanceID, String gcmSenderId, SharedPreferences sharedPrefs, ExamplePushRegistrationService registrationService) {
+        super(instanceID, gcmSenderId, sharedPrefs);
         mSharedPrefs = sharedPrefs;
         mRegistrationService = registrationService;
     }

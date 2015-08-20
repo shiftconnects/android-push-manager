@@ -21,7 +21,7 @@ import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
 import com.shiftconnects.android.push.util.GcmRegistrationAsyncTask;
 import com.shiftconnects.android.push.util.GcmSharedPreferenceConstants;
 
@@ -40,17 +40,17 @@ public abstract class PushManager implements GcmRegistrationAsyncTask.GcmRegistr
     private static final String TAG = PushManager.class.getSimpleName();
 
     protected SharedPreferences mSharedPrefs;
-    private GoogleCloudMessaging mGoogleCloudMessaging;
+    private InstanceID mInstanceId;
     private String mGcmSenderId;
 
     /**
      * Default constructor
-     * @param googleCloudMessaging - the instance of Google Cloud Messaging to use
+     * @param instanceId - the instance id instance
      * @param gcmSenderId - the GCM sender id to be used to retrieve registration ids
      * @param sharedPrefs - a {@link android.content.SharedPreferences} implementation to store the registration id in
      */
-    public PushManager(GoogleCloudMessaging googleCloudMessaging, String gcmSenderId, SharedPreferences sharedPrefs) {
-        mGoogleCloudMessaging = googleCloudMessaging;
+    public PushManager(InstanceID instanceId, String gcmSenderId, SharedPreferences sharedPrefs) {
+        mInstanceId = instanceId;
         mGcmSenderId = gcmSenderId;
         mSharedPrefs = sharedPrefs;
     }
@@ -64,7 +64,7 @@ public abstract class PushManager implements GcmRegistrationAsyncTask.GcmRegistr
      * class and call this method within {@link android.app.Application#onCreate()}
      */
     public void registerWithGCM() {
-        new GcmRegistrationAsyncTask(this, mGoogleCloudMessaging, mGcmSenderId).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new GcmRegistrationAsyncTask(this, mInstanceId, mGcmSenderId).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
